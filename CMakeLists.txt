@@ -39,3 +39,8 @@ ExternalProject_add(
     BUILD_IN_SOURCE 1
     BUILD_COMMAND make ${make_args}
 )
+
+rez_install_files(
+    cmake/openexr.cmake
+    DESTINATION .
+)
