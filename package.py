@@ -1,6 +1,6 @@
 name = "openexr"
 
-version = "2.1.0"
+version = "2.2.0"
 
 description = \
     """
@@ -8,20 +8,15 @@ description = \
     """
 
 variants = [
-    ["platform"]
-]
-
-build_requires = [
-    "ilmbase-2.1.0"
+    ["platform-linux"]
 ]
 
 requires = [
-    "ilmbase-2.1.0"
+    "ilmbase-2.2.0"
 ]
 
-uuid = "repository.openexr"
-
 def commands():
-    env.CMAKE_MODULE_PATH.append("{root}/cmake")
     env.PATH.prepend("{root}/bin")
     env.LD_LIBRARY_PATH.prepend("{root}/lib")
+    if building:
+    	env.CMAKE_MODULE_PATH.append("{root}/cmake")
