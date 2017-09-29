@@ -27,28 +27,31 @@ ExternalProject_add(
   INSTALL_COMMAND ""
 )
 
-#ExternalProject_add(
-#    pyilmbase
-#    DEPENDS ilmbase
-#    PREFIX pyilmbase
-#    DOWNLOAD_COMMAND ""
-#    PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/patch_pyilmbase_cmake.sh CMakeLists.txt #Don't really know why i need to do this
-#    SOURCE_DIR ${PROJECT_BINARY_DIR}/openexr/src/openexr/PyIlmBase
-#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DNAMESPACE_VERSIONING=OFF -DBoost_DEBUG=1 -DILMBASE_PACKAGE_PREFIX=${CMAKE_INSTALL_PREFIX} -DBoost_PYTHON_LIBRARY=boost_python -DPYTHON_INCLUDE_DIR=${python_INCLUDE_DIRS} -DPYTHON_LIBRARY=${python_LIBRARIES}
-#    BUILD_IN_SOURCE 1
-#)
+ExternalProject_add(
+    ilmbase
+    DEPENDS openexr
+    PREFIX ilmbase
+    DOWNLOAD_COMMAND ""
+    SOURCE_DIR ${PROJECT_BINARY_DIR}/openexr/src/openexr/IlmBase
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DNAMESPACE_VERSIONING=OFF
+    INSTALL_COMMAND "${install_cmd}"
+    BUILD_IN_SOURCE 0
+)
+
+#ExternalProject_Get_Property(ilmbase BINARY_DIR)
+#message(STATUS "ILMBASE DIR: ${BINARY_DIR}")
 
 ExternalProject_add(
     openexr_build
-    DEPENDS openexr
+    DEPENDS ilmbase
     DOWNLOAD_COMMAND ""
     PREFIX openexr_build
     SOURCE_DIR ${PROJECT_BINARY_DIR}/openexr/src/openexr/OpenEXR
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DNAMESPACE_VERSIONING=OFF -DILMBASE_PACKAGE_PREFIX=$ENV{REZ_ILMBASE_ROOT}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DNAMESPACE_VERSIONING=OFF -DILMBASE_PACKAGE_PREFIX=${CMAKE_INSTALL_PREFIX}
     #UPDATE_COMMAND ./bootstrap
     #CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX} --with-pic --disable-ilmbasetest --with-ilmbase-prefix=$ENV{REZ_ILMBASE_ROOT}
     INSTALL_COMMAND "${install_cmd}"
-    BUILD_IN_SOURCE 1
+    BUILD_IN_SOURCE 0
     BUILD_COMMAND make ${make_args}
 )
 

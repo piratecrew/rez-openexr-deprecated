@@ -7,13 +7,11 @@ description = \
     OpenEXR
     """
 
-variants = [
-    ["platform-linux"]
-]
-
-requires = [
-    "ilmbase-2.2.0"
-]
+@early()
+def variants():
+    from rez.package_py_utils import expand_requires
+    requires = ["platform-**", "os-*.*"]
+    return [expand_requires(*requires)]
 
 def commands():
     env.PATH.prepend("{root}/bin")
